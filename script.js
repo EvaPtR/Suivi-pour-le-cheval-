@@ -1,132 +1,131 @@
-// Fonction pour charger les événements depuis le localStorage
-function chargerEvenements() {
+// Récupération des éléments du DOM
+const formulaire = document.getElementById("foin-form");
+const liste = document.getElementById("liste-evenements");
+const resetBtn = document.getElementById("reset-historique");
+const selectType = document.getElementById("type");
+const quantiteInput = document.getElementById("quantite");
+const dureeInput = document.getElementById("duree");
+
+// Récupération des éléments du carnet d'adresses
+const formContact = document.getElementById("form-contact");
+const listeContacts = document.getElementById("liste-contacts");
+
+// Durées par défaut en jours selon le type
+const dureesParType = {
+  "foin": 13,
+  "vermifuge": 75,
+  "marechal": 49,
+  "veterinaire": 0
+};
+
+// Charger les données depuis localStorage au chargement
+window.onload = () => {
   const evenements = JSON.parse(localStorage.getItem("evenements")) || [];
-  const liste = document.getElementById("liste-evenements");
-  liste.innerHTML = "";
+  evenements.forEach(afficherEvenement);
 
-  evenements.forEach(evenement => {
-    const li = document.createElement("li");
+  const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+  contacts.forEach(afficherContact);
+};
 
-    // Pastille de couleur
-    const pastille = document.createElement("div");
-    pastille.className = `pastille ${evenement.type}`;
-
-    // Contenu texte de l’événement
-    const texte = document.createElement("div");
-    texte.className = "texte-evenement";
-    texte.innerHTML = `
-      <strong>${evenement.type}</strong>
-      le ${evenement.date} (${evenement.quantite || "n/a"}) → Prochaine : ${evenement.prochaineDate}
-    `;
-
-    li.appendChild(pastille);
-    li.appendChild(texte);
-    liste.appendChild(li);
-  });
-}
-
-// Fonction pour sauvegarder un événement dans le localStorage
-function enregistrerEvenement(event) {
-  event.preventDefault();
-
-  const type = document.getElementById("type-evenement").value;
-  const date = document.getElementById("date").value;
-  const quantite = document.getElementById("quantite").value;
-
-  if (!type || !date) return;
-
-  let dureeEstimee = 0;
-
-  // Calcul de la durée estimée automatique selon le type et la quantité
-  switch (type) {
-    case "foin":
-      dureeEstimee = parseFloat(quantite) * 13;
-      break;
-    case "vermifuge":
-      dureeEstimee = 75; // 2,5 mois
-      break;
-    case "marechal":
-      dureeEstimee = 49; // 7 semaines
-      break;
-    case "veterinaire":
-      dureeEstimee = 180; // valeur indicative
-      break;
+// Met à jour automatiquement la durée estimée selon type + quantité
+quantiteInput.addEventListener("input", () => {
+  const type = selectType.value;
+  const quantite = parseInt(quantiteInput.value);
+  if (!isNaN(quantite) && dureesParType[type]) {
+    dureeInput.value = quantite * dureesParType[type];
+  } else {
+    dureeInput.value = "";
   }
+});
 
-  // Calcul de la date de renouvellement
-  const prochaineDate = new Date(date);
-  prochaineDate.setDate(prochaineDate.getDate() + dureeEstimee);
-  const prochaineDateStr = prochaineDate.toISOString().split("T")[0];
+// Gestion du formulaire d'événement
+formulaire.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-  const nouvelEvenement = {
+  const type = selectType.value;
+  const date = document.getElementById("date").value;
+  const quantite = quantiteInput.value;
+  const duree = dureeInput.value;
+
+  const dateRachat = new Date(date);
+  dateRachat.setDate(dateRachat.getDate() + Number(duree));
+  const datePrevue = dateRachat.toISOString().split("T")[0];
+
+  const evenement = {
     type,
     date,
     quantite,
-    prochaineDate: prochaineDateStr
+    duree,
+    datePrevue
   };
 
+  afficherEvenement(evenement);
+  enregistrerEvenement(evenement);
+  formulaire.reset();
+});
+
+function afficherEvenement(e) {
+  const li = document.createElement("li");
+
+  const pastille = document.createElement("div");
+  pastille.className = `pastille ${e.type}`;
+
+  const texte = document.createElement("div");
+  texte.className = "texte-evenement";
+  texte.innerHTML = `
+    <strong>${e.type.charAt(0).toUpperCase() + e.type.slice(1)}</strong>
+    Date : ${e.date}<br>
+    Quantité : ${e.quantite}<br>
+    Durée estimée : ${e.duree} jours<br>
+    Date prévue : ${e.datePrevue}
+  `;
+
+  li.appendChild(pastille);
+  li.appendChild(texte);
+  liste.appendChild(li);
+}
+
+function enregistrerEvenement(e) {
   const evenements = JSON.parse(localStorage.getItem("evenements")) || [];
-  evenements.push(nouvelEvenement);
+  evenements.push(e);
   localStorage.setItem("evenements", JSON.stringify(evenements));
-
-  chargerEvenements();
-  document.getElementById("form-evenement").reset();
 }
 
-// Réinitialisation de l’historique
-function resetHistorique() {
+resetBtn.addEventListener("click", () => {
   localStorage.removeItem("evenements");
-  chargerEvenements();
-}
+  liste.innerHTML = "";
+});
 
-// Gestion des contacts
-function ajouterContact(event) {
-  event.preventDefault();
-
+// Gestion du carnet d'adresses
+formContact.addEventListener("submit", (e) => {
+  e.preventDefault();
   const nom = document.getElementById("nom-contact").value;
   const tel = document.getElementById("tel-contact").value;
-  const role = document.getElementById("role-contact").value;
 
-  if (!nom || !tel) return;
+  const contact = { nom, tel };
+  afficherContact(contact);
+  enregistrerContact(contact);
+  formContact.reset();
+});
 
-  const nouveauContact = { nom, tel, role };
+function afficherContact(contact) {
+  const li = document.createElement("li");
+  li.innerHTML = `
+    ${contact.nom} : ${contact.tel}
+    <button onclick="supprimerContact(this, '${contact.nom}')">Supprimer</button>
+  `;
+  listeContacts.appendChild(li);
+}
 
+function enregistrerContact(contact) {
   const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
-  contacts.push(nouveauContact);
+  contacts.push(contact);
   localStorage.setItem("contacts", JSON.stringify(contacts));
-
-  chargerContacts();
-  document.getElementById("form-contact").reset();
 }
 
-// Afficher les contacts
-function chargerContacts() {
-  const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
-  const liste = document.getElementById("liste-contacts");
-  liste.innerHTML = "";
-
-  contacts.forEach((contact, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${contact.nom} (${contact.role}) : ${contact.tel}
-      <button onclick="supprimerContact(${index})">Supprimer</button>
-    `;
-    liste.appendChild(li);
-  });
-}
-
-// Supprimer un contact par son index
-function supprimerContact(index) {
-  const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
-  contacts.splice(index, 1);
+function supprimerContact(button, nom) {
+  let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+  contacts = contacts.filter(c => c.nom !== nom);
   localStorage.setItem("contacts", JSON.stringify(contacts));
-  chargerContacts();
+  button.parentElement.remove();
 }
-
-// Initialisation
-document.getElementById("form-evenement").addEventListener("submit", enregistrerEvenement);
-document.getElementById("form-contact").addEventListener("submit", ajouterContact);
-document.getElementById("reset").addEventListener("click", resetHistorique);
-
-chargerEvenements();
-chargerContacts();
