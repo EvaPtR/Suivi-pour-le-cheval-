@@ -2,34 +2,77 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Suivi du foin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>⛄ Suivi du cheval</title>
+  <!-- Lien vers la feuille de style CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>🐴 Suivi des achats de foin</h1>
+  <!-- Titre principal -->
+  <h1>🐎 Suivi complet du cheval</h1>
 
-    <form id="foin-form">
-      <label for="date">📅 Date d'achat :</label>
-      <input type="date" id="date" required />
+  <!-- Formulaire de suivi des événements (foin, vermifuge, etc.) -->
+  <form id="suivi-form">
+    <!-- Menu déroulant pour choisir le type d'événement -->
+    <label for="type">Type d'événement :</label>
+    <select id="type">
+      <option value="foin">Achat de foin</option>
+      <option value="vermifuge">Vermifuge</option>
+      <option value="marechal">Maréchal-ferrant</option>
+      <option value="veterinaire">Vétérinaire</option>
+    </select>
 
-      <label for="quantite">💼 Quantité achetée (kg ou ballots) :</label>
-      <input type="number" id="quantite" required />
+    <!-- Champ pour sélectionner la date de l'événement -->
+    <label for="date">Date :</label>
+    <input type="date" id="date" required />
 
-      <label for="duree">📦 Durée estimée (en jours) :</label>
-      <input type="number" id="duree" required />
+    <!-- Champ pour entrer la quantité (si utile selon le type) -->
+    <label for="quantite">Quantité achetée (kg ou ballots) :</label>
+    <input type="text" id="quantite" />
 
-      <button type="submit">Ajouter</button>
+    <!-- Champ pour la durée estimée, automatiquement calculé si possible -->
+    <label for="duree">Durée estimée (en jours) :</label>
+    <input type="number" id="duree" />
+
+    <!-- Bouton pour soumettre le formulaire -->
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <!-- Section affichant l'historique des événements ajoutés -->
+  <section>
+    <h2>📅 Historique</h2>
+    <!-- Liste des événements enregistrés -->
+    <ul id="liste-evenements"></ul>
+    <!-- Bouton pour réinitialiser l'historique -->
+    <button id="reset-historique" class="btn-reset">Réinitialiser l'historique</button>
+  </section>
+
+  <!-- Carnet d'adresses lié aux intervenants du cheval -->
+  <section>
+    <h2>📥 Carnet d'adresses</h2>
+    <form id="contact-form">
+      <!-- Nom du contact -->
+      <label for="nom-contact">Nom :</label>
+      <input type="text" id="nom-contact" required />
+
+      <!-- Rôle ou fonction du contact (vétérinaire, maréchal, etc.) -->
+      <label for="type-contact">Rôle :</label>
+      <input type="text" id="type-contact" required />
+
+      <!-- Numéro de téléphone du contact -->
+      <label for="tel-contact">Téléphone :</label>
+      <input type="tel" id="tel-contact" required />
+
+      <!-- Bouton pour enregistrer un contact -->
+      <button type="submit">Ajouter le contact</button>
     </form>
 
-    <div id="historique">
-      <h2>📚 Historique</h2>
-      <ul id="liste-achats"></ul>
-      <button id="reset-historique">Réinitialiser l’historique</button>
-    </div>
-  </div>
+    <!-- Liste des contacts ajoutés -->
+    <ul id="liste-contacts"></ul>
+  </section>
 
+  <!-- Lien vers le script JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
+
