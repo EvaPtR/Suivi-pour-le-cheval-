@@ -1,198 +1,60 @@
-/* Style général de la page */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #f4f4f4;
-  color: #333;
-}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suivi du foin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-h1, h2 {
-  text-align: center;
-  color: #333;
-}
+  <h1>Suivi du cheval</h1>
 
-form {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%; /* ✅ Ajout clé */
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  box-sizing: border-box; /* ✅ Pour éviter débordements */
-}
+  <!-- Formulaire principal pour ajouter un événement -->
+  <form id="foin-form">
+    <label for="type">Type d'événement :</label>
+    <select id="type" required>
+      <option value="foin">Achat de foin</option>
+      <option value="vermifuge">Vermifuge</option>
+      <option value="marechal">Maréchal-ferrant</option>
+      <option value="veterinaire">Vétérinaire</option>
+    </select>
 
+    <label for="date">Date :</label>
+    <input type="date" id="date" required />
 
-label {
-  font-weight: bold;
-}
+    <label for="quantite">Quantité (si foin, en bottes) :</label>
+    <input type="number" id="quantite" min="1" />
 
-input, select, button {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
+    <label for="duree">Durée estimée (en jours) :</label>
+    <input type="number" id="duree" required />
 
-button[type="submit"] {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
+    <button type="submit">Ajouter</button>
+  </form>
 
-button[type="submit"]:hover {
-  background-color: #218838;
-}
+  <!-- Historique des événements -->
+  <section>
+    <h2>Historique</h2>
+    <ul id="liste-evenements"></ul>
+    <button class="btn-reset" id="reset-historique">Effacer l'historique</button>
+  </section>
 
-section {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+  <!-- Carnet d'adresses -->
+  <section>
+    <h2>Carnet d'adresses</h2>
+    <form id="form-contact">
+      <label for="nom-contact">Nom du contact :</label>
+      <input type="text" id="nom-contact" required />
 
-ul {
-  list-style: none;
-  padding: 0;
-}
+      <label for="tel-contact">Téléphone :</label>
+      <input type="tel" id="tel-contact" required />
 
-/* Style de l'historique avec pastille */
-#liste-evenements li {
-  background: #fefefe;
-  border-left: 5px solid #ccc;
-  margin: 10px 0;
-  padding: 10px 15px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 16px;
-  line-height: 1.5;
-}
+      <button type="submit">Ajouter</button>
+    </form>
+    <ul id="liste-contacts"></ul>
+  </section>
 
-#liste-evenements .pastille {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+  <script src="script.js"></script>
+</body>
+</html>
 
-/* Couleurs des pastilles par type */
-.pastille.foin {
-  background-color: #fdd835; /* jaune */
-}
-
-.pastille.vermifuge {
-  background-color: #29b6f6; /* bleu clair */
-}
-
-.pastille.marechal {
-  background-color: #66bb6a; /* vert */
-}
-
-.pastille.veterinaire {
-  background-color: #ef5350; /* rouge */
-}
-
-/* Style des infos de l'événement */
-#liste-evenements .texte-evenement {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  line-height: 1.4;
-  align-items: center;
-  word-break: break-word;
-}
-
-#liste-evenements .texte-evenement strong {
-  font-size: 17px;
-  margin-right: 5px;
-}
-
-/* Bouton rouge pour réinitialiser */
-.btn-reset {
-  background-color: #e53935;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  width: 100%;
-  margin-top: 20px;
-  cursor: pointer;
-}
-
-.btn-reset:hover {
-  background-color: #c62828;
-}
-
-/* Style pour les contacts */
-#liste-contacts li {
-  background: #f0f0f0;
-  margin-top: 10px;
-  padding: 12px 15px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px;
-}
-
-
-
-#liste-contacts button {
-  background-color: #d32f2f;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-#liste-contacts button:hover {
-  background-color: #b71c1c;
-}
-
-/* Responsive pour petits écrans */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-
-  form, section {
-    padding: 15px;
-  }
-
-  input, select, button {
-    font-size: 15px;
-  }
-
-  #liste-evenements li {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  #liste-evenements .texte-evenement {
-    margin-top: 5px;
-  }
-}
