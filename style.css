@@ -1,15 +1,10 @@
+/* Style général de la page */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
   margin: 0;
-  display: flex;
-  justify-content: center;
-  padding: 30px;
-}
-
-.container {
-  width: 100%;
-  max-width: 600px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
 h1, h2 {
@@ -17,46 +12,60 @@ h1, h2 {
   color: #333;
 }
 
-form, #historique {
-  background: white;
+form {
+  background: #fff;
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-form label {
-  display: block;
-  margin-top: 10px;
-}
-
-form input {
-  width: 96%;
-  padding: 8px;
-  margin-top: 4px;
-}
-
-form button {
-  margin-top: 15px;
-  padding: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
   width: 100%;
-  background-color: #4caf50;
-  color: white;
-  border: none;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: stretch;
+}
+
+
+label {
+  font-weight: bold;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
+  box-sizing: border-box;
 }
 
-#reset-historique {
-  margin-top: 20px;
-  background-color: crimson;
+button[type="submit"] {
+  background-color: #28a745;
   color: white;
-  padding: 10px;
-  width: 100%;
   border: none;
   cursor: pointer;
-  border-radius: 4px;
+  font-weight: bold;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 ul {
@@ -64,8 +73,126 @@ ul {
   padding: 0;
 }
 
-li {
+/* Style de l'historique avec pastille */
+#liste-evenements li {
+  background: #fefefe;
+  border-left: 5px solid #ccc;
   margin: 10px 0;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+#liste-evenements .pastille {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Couleurs des pastilles par type */
+.pastille.foin {
+  background-color: #fdd835; /* jaune */
+}
+
+.pastille.vermifuge {
+  background-color: #29b6f6; /* bleu clair */
+}
+
+.pastille.marechal {
+  background-color: #66bb6a; /* vert */
+}
+
+.pastille.veterinaire {
+  background-color: #ef5350; /* rouge */
+}
+
+/* Style des infos de l'événement */
+#liste-evenements .texte-evenement {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  line-height: 1.4;
+  align-items: center;
+  word-break: break-word;
+}
+
+#liste-evenements .texte-evenement strong {
+  font-size: 17px;
+  margin-right: 5px;
+}
+
+/* Bouton rouge pour réinitialiser */
+.btn-reset {
+  background-color: #e53935;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  width: 100%;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.btn-reset:hover {
+  background-color: #c62828;
+}
+
+/* Style pour les contacts */
+#liste-contacts li {
+  background: #f0f0f0;
+  margin-top: 10px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+
+
+#liste-contacts button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#liste-contacts button:hover {
+  background-color: #b71c1c;
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  form, section {
+    padding: 15px;
+  }
+
+  input, select, button {
+    font-size: 15px;
+  }
+
+  #liste-evenements li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #liste-evenements .texte-evenement {
+    margin-top: 5px;
+  }
 }
